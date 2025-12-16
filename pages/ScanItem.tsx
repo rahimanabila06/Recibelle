@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../types';
+import { analyzeClothingItem } from '../services/ai';
 
 export const ScanItem: React.FC = () => {
   const navigate = useNavigate();
   const [isScanning, setIsScanning] = useState(false);
 
-  const handleCapture = () => {
+  const handleCapture = async () => {
     setIsScanning(true);
-    // Simulate AI analysis delay
-    setTimeout(() => {
-      navigate(AppRoute.EDIT_ITEM, { replace: true });
-    }, 2000);
+    
+    // Call Gemini AI to analyze the item
+    // In a real app, we would capture the video frame to base64 here
+    const data = await analyzeClothingItem();
+    
+    navigate(AppRoute.EDIT_ITEM, { state: { itemData: data } });
   };
 
   return (
@@ -43,7 +46,7 @@ export const ScanItem: React.FC = () => {
            </div>
            <div className="mt-6 flex flex-col items-center gap-2">
              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-             <p className="text-white font-bold text-lg tracking-wide">Analyzing Item...</p>
+             <p className="text-white font-bold text-lg tracking-wide">AI Analyzing Item...</p>
            </div>
         </div>
       )}
