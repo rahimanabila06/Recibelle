@@ -13,7 +13,9 @@ export interface AnalyzedItem {
 
 export const analyzeClothingItem = async (): Promise<AnalyzedItem> => {
   try {
-    // Initialize the client inside the try block to handle cases where API_KEY might be missing or invalid
+    // Initialize the client inside the try block.
+    // NOTE: In some browser environments without a bundler, accessing process.env might throw.
+    // The try/catch block ensures the app falls back to mock data instead of crashing.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     // In a real scenario, we would pass the base64 image data here.
@@ -47,8 +49,10 @@ export const analyzeClothingItem = async (): Promise<AnalyzedItem> => {
     
     return JSON.parse(text) as AnalyzedItem;
   } catch (error) {
-    console.error("AI Analysis failed", error);
-    // Fallback data if API key is missing or error occurs
+    // Gracefully handle missing API key or environment issues
+    console.warn("Using fallback data. API Key may be missing or invalid.");
+    
+    // Fallback data
     return {
       itemName: "White Linen Shirt",
       category: "Tops > Shirts",
