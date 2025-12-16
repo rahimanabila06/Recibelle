@@ -1,0 +1,7 @@
+{
+  "name": "Recibelle",
+  "description": "Your AI-powered personal stylist and digital wardrobe manager.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
